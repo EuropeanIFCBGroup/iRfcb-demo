@@ -334,18 +334,19 @@ worms_records <- ifcb_match_taxa_names(
 
 # Create data frame with taxa information and class names
 class_names <- worms_records %>%
-  mutate(class = taxa_names, class_clean = taxa_names_clean)
+  mutate(class_name = taxa_names, class_clean = taxa_names_clean)
 ```
 
 The **scientificName** and **verbatimIdentification** fields are populated using the cleaned taxonomic names and the original class names, respectively.
 
 ```{r}
 data_occurrences <- data_occurrences %>%
-  left_join(class_names, by = "class") %>%
+  rename(class_name = class) %>%
+  left_join(class_names, by = "class_name") %>%
   mutate(
     scientificName = name,
     scientificNameAuthorship = authority,
-    verbatimIdentification = class,
+    verbatimIdentification = class_name,
     scientificNameID = lsid,
     taxonRank = rank,
     occurrenceStatus = "present"
